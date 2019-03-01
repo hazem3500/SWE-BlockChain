@@ -1,15 +1,15 @@
 import BlockChain from './classes/BlockChain.mjs';
 
-const blockChainInstance = new BlockChain();
+const numOfBlocks = 10;
+const difficulty = 3;
 
-blockChainInstance.addBlock({
-    data: 'Block 1'
-});
+const blockChainInstance = new BlockChain({ difficulty });
 
-blockChainInstance.addBlock({
-    data: 'Block 2'
-});
-
+for (let index = 0; index < numOfBlocks; index++) {
+    blockChainInstance.addBlock({
+        data: `Block ${index + 1}`
+    });
+}
 console.log(JSON.stringify(blockChainInstance, null, 4));
 console.log(
     `Is blockchain valid? ${blockChainInstance.checkIfValid().toString()}`

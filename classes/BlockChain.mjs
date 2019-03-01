@@ -10,7 +10,7 @@ export default class BlockChain {
         this.difficulty = difficulty;
     }
 
-    latestBlock() {
+    get latestBlock() {
         return this.chain[this.chain.length - 1];
     }
 
@@ -18,7 +18,7 @@ export default class BlockChain {
         const newBlock = new Block({
             index: this.chain.length - 1,
             data,
-            previousHash: this.latestBlock().hash
+            previousHash: this.latestBlock.hash
         });
         newBlock.mineBlock(this.difficulty);
         this.chain.push(newBlock);
