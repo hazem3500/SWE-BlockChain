@@ -2,8 +2,8 @@ import BlockChain from './classes/BlockChain.mjs';
 
 const args = process.argv.slice(2);
 
-const numOfBlocks = 10;
-const difficulty = args[0];
+const numOfBlocks = args[0] || 10;
+const difficulty = args[1];
 
 const blockChainInstance = new BlockChain({ difficulty });
 

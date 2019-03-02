@@ -26,7 +26,7 @@ export default class Block {
     }
 
     mineBlock(difficulty) {
-        console.log(`Mining block ${this.index}...`);
+        console.log(`Mining block ${this.index + 1}...`);
         while (this.hash.substring(0, difficulty) !== '0'.repeat(difficulty)) {
             this.nonce++;
             this.hash = this.calculateHash();
