@@ -31,6 +31,7 @@ export default class Block {
             this.nonce++;
             this.hash = this.calculateHash();
         }
+        Object.freeze(this); // MADE BLOCK IMMUTABLE
         console.log(`Block Mined: ${this.hash}`);
     }
 }

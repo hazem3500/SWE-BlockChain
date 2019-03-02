@@ -12,6 +12,7 @@ for (let index = 0; index < numOfBlocks; index++) {
         data: `Block ${index + 1}`
     });
 }
+
 console.log(JSON.stringify(blockChainInstance, null, 4));
 console.log(
     `Is blockchain valid? ${blockChainInstance.checkIfValid().toString()}`
