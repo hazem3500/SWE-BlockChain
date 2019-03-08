@@ -1,10 +1,12 @@
 import SHA256 from 'crypto-js/sha256';
 import elliptic from 'elliptic';
+import colorIt from 'color-it';
+import emojic from 'emojic';
 
 const ec = new elliptic.ec('secp256k1');
 
 export default class Transaction {
-    constructor({ fromAddress = null, toAddress = null, amount = 0 }) {
+    constructor({ fromAddress = null, toAddress = null, amount = 0 } = {}) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
@@ -16,7 +18,8 @@ export default class Transaction {
 
     signTransaction(signingKey) {
         if (signingKey.getPublic('hex') !== this.fromAddress) {
-            throw new Error('Can\'t sign transactions from other wallets');
+            console.log(`${emojic.noEntry}  ${colorIt('Can\'t sign transactions from other wallets').red()}`);
+            return;
         }
         const hash = this.calculateHash();
         this.signature = signingKey.sign(hash, 'base64').toDER('hex');
@@ -25,7 +28,8 @@ export default class Transaction {
     isValid() {
         if (this.fromAddress === null) return true;
         if (!this.signature) {
-            throw new Error('Transaction isn\'t signed!');
+            console.log(`${emojic.noEntry}  ${colorIt('Transaction isn\'t signed!').red()}`);
+            return false;
         }
 
         const publicKey = ec.keyFromPublic(this.fromAddress, 'hex');
