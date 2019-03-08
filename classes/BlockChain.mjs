@@ -2,17 +2,21 @@ import Block from './Block';
 import Transaction from './Transaction';
 
 export default class BlockChain {
-    constructor({ difficulty = 4, maxTransactions = 5 } = {}) {
-        this.chain = [
-            // Adding Genesis block
+    constructor({
+        chain = [
             new Block({
                 transactions: []
-            })
-        ];
+            })],
+        difficulty = 4,
+        maxTransactions = 5,
+        pendingTransactions = [],
+        miningReward = 200
+    }) {
+        this.chain = chain;
         this.difficulty = difficulty;
         this.maxTransactions = maxTransactions;
-        this.pendingTransactions = []; // Mo3
-        this.miningReward = 200; // Mo3
+        this.pendingTransactions = pendingTransactions; // Mo3
+        this.miningReward = miningReward; // Mo3
     }
 
     get latestBlock() {
@@ -36,8 +40,15 @@ export default class BlockChain {
             })
         ];
     }
-    createTransaction(transaction) {
+    addTransaction(transaction) {
     // fill the array of transactions in the blockChain  //Mo3
+        if (!transaction.fromAddress || !transaction.toAddress) {
+            throw new Error('Transaction must contain from and to address');
+        }
+
+        if (!transaction.isValid()) {
+            throw new Error('Can\'t add invalid transaction to the chain.');
+        }
         this.pendingTransactions.push(transaction);
     }
     getBalanceOfAddress(address) {
@@ -60,7 +71,7 @@ export default class BlockChain {
         return this.chain.every(
             (block, index, chain) =>
                 index === 0 ||
-        (block.hash === block.calculateHash() &&
+        (block.checkTransactions() && block.hash === block.calculateHash() &&
           block.previousHash === chain[index - 1].hash)
         );
     }

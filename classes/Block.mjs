@@ -34,4 +34,11 @@ export default class Block {
         Object.freeze(this); // MADE BLOCK IMMUTABLE
         console.log(`Block Mined: ${this.hash}`);
     }
+
+    checkTransactions() {
+        for (const trans of this.transactions) {
+            if (!trans.isValid) return false;
+        }
+        return true;
+    }
 }

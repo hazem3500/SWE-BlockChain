@@ -16,7 +16,7 @@ export default class Transaction {
 
     signTransaction(signingKey) {
         if (signingKey.getPublic('hex') !== this.fromAddress) {
-            throw new Error('Transaction not allowed!');
+            throw new Error('Can\'t sign transactions from other wallets');
         }
         const hash = this.calculateHash();
         this.signature = signingKey.sign(hash, 'base64').toDER('hex');

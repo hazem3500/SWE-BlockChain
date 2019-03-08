@@ -1,21 +1,22 @@
 import BlockChain from './classes/BlockChain.mjs';
+import keyFileStorage from 'key-file-storage';
+
+const kfs = keyFileStorage('./');
 
 const args = process.argv.slice(2);
 
-const numOfTransactions = args[0] || 10;
-const difficulty = args[1];
+const difficulty = args[0];
 
-const blockChainInstance = new BlockChain({ difficulty });
+let blockChainInstance = new BlockChain({ difficulty });
 
-for (let index = 0; index < numOfTransactions; index++) {
-    blockChainInstance.createTransaction({
-        transactions: `Block ${index + 1}`
-    });
+if (!kfs.blockChain) {
+    blockChainInstance = new BlockChain({ difficulty });
+    kfs.blockChain = blockChainInstance;
+} else {
+    blockChainInstance = new BlockChain(kfs.blockChain);
 }
 
-blockChainInstance.minePendingTransactions();
-
 console.log(JSON.stringify(blockChainInstance, null, 4));
-console.log(
-    `Is blockchain valid? ${blockChainInstance.checkIfValid().toString()}`
-);
+// console.log(
+//     `Is blockchain valid? ${blockChainInstance.checkIfValid().toString()}`
+// );
