@@ -7,7 +7,7 @@ const args = process.argv.slice(2);
 
 const difficulty = args[0];
 
-let blockChainInstance = new BlockChain({ difficulty });
+let blockChainInstance;
 
 if (!kfs.blockChain) {
     blockChainInstance = new BlockChain({ difficulty });
@@ -16,7 +16,9 @@ if (!kfs.blockChain) {
     blockChainInstance = new BlockChain(kfs.blockChain);
 }
 
+blockChainInstance.minePendingTransactions();
+
 console.log(JSON.stringify(blockChainInstance, null, 4));
-// console.log(
-//     `Is blockchain valid? ${blockChainInstance.checkIfValid().toString()}`
-// );
+console.log(
+    `Is blockchain valid? ${blockChainInstance.checkIfValid().toString()}`
+);

@@ -25,6 +25,10 @@ export default class BlockChain {
 
     minePendingTransactions(miningRewardAddress) {
     // mine a block, push it in the blockChain, create a transaction to give the miner the miningReward //Mo3
+        if (!this.pendingTransactions.length) {
+            console.log('There are no pending transactions for you to mine.');
+            return;
+        }
         const block = new Block({
             transactions: this.pendingTransactions.splice(0, this.maxTransactions),
             previousHash: this.chain[this.chain.length - 1]
