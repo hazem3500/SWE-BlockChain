@@ -22,3 +22,5 @@ console.log(JSON.stringify(blockChainInstance, null, 4));
 console.log(
     `Is blockchain valid? ${blockChainInstance.checkIfValid().toString()}`
 );
+
+
