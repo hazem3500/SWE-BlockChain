@@ -39,7 +39,7 @@ export default class App {
             amount: answers.amount
         });
         transaction.signTransaction(Key);
-        this.blockChain.addTransaction(transaction);
+        this.blockChain.addTransaction(transaction, Key.getPublic('hex'));
         this.updateBlockChain();
     }
 
