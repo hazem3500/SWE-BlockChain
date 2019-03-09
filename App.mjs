@@ -1,10 +1,11 @@
 import keyFileStorage from 'key-file-storage';
 import inquirer from 'inquirer';
+import colorIt from 'color-it';
+import emojic from 'emojic';
 
 import BlockChain from './classes/BlockChain.mjs';
 import Transaction from './classes/Transaction';
 import Key from './classes/KeyHandler';
-
 
 const kfs = keyFileStorage('./');
 
@@ -23,12 +24,12 @@ export default class App {
         const answers = await inquirer.prompt([
             {
                 name: 'toAddress',
-                message: 'Enter receiver\'s key: '
+                message: "Enter receiver's key: "
             },
             {
                 name: 'amount',
                 message: 'Enter amount: '
-            },
+            }
         ]);
         const transaction = new Transaction({
             fromAddress: Key.getPublic('hex'),
@@ -40,22 +41,44 @@ export default class App {
         kfs.blockChain = this.blockChain;
     }
 
-    mine() {
-        this.blockChain.minePendingTransactions(Key.getPublic('hex'));
+    async mine() {
+        await this.blockChain.minePendingTransactions(Key.getPublic('hex'));
         kfs.blockChain = this.blockChain;
     }
 
     getUserInfo() {
-        return {
-            publicKey: Key.getPublic('hex'),
-            balance: this.blockChain.getBalanceOfAddress(Key.getPublic('hex'))
-        };
+        const balance = this.blockChain.getBalanceOfAddress(
+            Key.getPublic('hex')
+        );
+        console.log(
+            `${emojic.key}  PUBLIC KEY: ${colorIt(
+                Key.getPublic('hex')
+            ).emerland()}`
+        );
+        console.log(
+            `${emojic.potato}  BALANCE: ${colorIt(
+                balance
+            ).emerland()} ${colorIt('PC').wetAsphalt()}`
+        );
     }
 
     logBlockChain() {
-        console.log(JSON.stringify(this.blockChain, null, 4));
         console.log(
-            `Is blockchain valid? ${blockChain.checkIfValid().toString()}`
+            `${colorIt(JSON.stringify(this.blockChain, null, 4)).blue()}`
         );
+    }
+
+    isBlockChainValid() {
+        if (this.blockChain.checkIfValid()) {
+            console.log(
+                `${emojic.whiteCheckMark}  ${colorIt(
+                    'Block chain is valid.'
+                ).green()}`
+            );
+        } else {
+            console.log(
+                `${emojic.noEntry}  ${colorIt("Block chain isn't valid.").red}`
+            );
+        }
     }
 }

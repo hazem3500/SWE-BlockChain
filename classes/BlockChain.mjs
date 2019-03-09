@@ -26,7 +26,7 @@ export default class BlockChain {
         return this.chain[this.chain.length - 1];
     }
 
-    minePendingTransactions(miningRewardAddress) {
+    async minePendingTransactions(miningRewardAddress) {
     // mine a block, push it in the blockChain, create a transaction to give the miner the miningReward //Mo3
         if (!this.pendingTransactions.length) {
             console.log(`${emojic.warning}  ${colorIt('There are no pending transactions for you to mine.').wetAsphalt()}`);
@@ -37,7 +37,7 @@ export default class BlockChain {
             transactions: this.pendingTransactions.splice(0, this.maxTransactions),
             previousHash: this.chain[this.chain.length - 1].hash
         });
-        block.mineBlock(this.difficulty);
+        await block.mineBlock(this.difficulty);
         console.log(`${emojic.whiteCheckMark}  ${colorIt('Block Successfully Mined').green()}`);
         this.chain.push(block);
         this.pendingTransactions = [
@@ -86,8 +86,9 @@ export default class BlockChain {
         return this.chain.every(
             (block, index, chain) =>
                 index === 0 ||
-        (block.checkTransactions() && block.hash === block.calculateHash() &&
-          block.previousHash === chain[index - 1].hash)
+                    (new Block(block).checkTransactions()
+                        && block.hash === new Block(block).calculateHash()
+                        && block.previousHash === chain[index - 1].hash)
         );
     }
 }

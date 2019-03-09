@@ -5,7 +5,6 @@ import promiseWhile from './helpers/promiseWhile';
 import App from './App';
 
 const app = new App();
-let userInfo = app.getUserInfo();
 let exitApplication = false;
 
 const options = [
@@ -17,6 +16,8 @@ const options = [
             { name: 'Make a transaction', value: 'transaction' },
             { name: 'Mine PotatoCoins', value: 'mine' },
             { name: 'Get my info', value: 'info' },
+            { name: 'Log block chain', value: 'log' },
+            { name: 'Validate block chain', value: 'validate' },
             { name: 'Exit', value: 'exit' },
         ]
     }
@@ -31,12 +32,16 @@ promiseWhile(() => !exitApplication, () => inquirer.prompt(options).then(async a
         await app.addTransaction();
         break;
     case 'mine':
-        app.mine();
+        await app.mine();
         break;
     case 'info':
-        userInfo = app.getUserInfo();
-        console.log(`${emojic.key}  PUBLIC KEY: ${colorIt(userInfo.publicKey).emerland()}`);
-        console.log(`${emojic.potato}  BALANCE: ${colorIt(userInfo.balance).emerland()} ${colorIt('PC').wetAsphalt()}`);
+        app.getUserInfo();
+        break;
+    case 'log':
+        app.logBlockChain();
+        break;
+    case 'validate':
+        app.isBlockChainValid();
         break;
     case 'exit':
         exitApplication = true;

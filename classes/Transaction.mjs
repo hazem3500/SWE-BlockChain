@@ -6,10 +6,11 @@ import emojic from 'emojic';
 const ec = new elliptic.ec('secp256k1');
 
 export default class Transaction {
-    constructor({ fromAddress = null, toAddress = null, amount = 0 } = {}) {
+    constructor({ fromAddress = null, toAddress = null, amount = 0, signature = null} = {}) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
+        this.signature = signature;
     }
 
     calculateHash() {
