@@ -10,7 +10,8 @@ import Key from './classes/KeyHandler';
 const kfs = keyFileStorage('./');
 
 export default class App {
-    constructor() {
+    constructor({ p2p }) {
+        this.p2p = p2p;
         // CHECK IF BLOCKCHAIN SAVED IN STORAGE OR NOT
         if (!kfs.blockChain) {
             this.blockChain = new BlockChain();
@@ -21,6 +22,7 @@ export default class App {
     }
 
     async addTransaction() {
+        this.getLatestBlockChain();
         const answers = await inquirer.prompt([
             {
                 name: 'toAddress',
@@ -38,15 +40,17 @@ export default class App {
         });
         transaction.signTransaction(Key);
         this.blockChain.addTransaction(transaction);
-        kfs.blockChain = this.blockChain;
+        this.updateBlockChain();
     }
 
     async mine() {
+        this.getLatestBlockChain();
         await this.blockChain.minePendingTransactions(Key.getPublic('hex'));
-        kfs.blockChain = this.blockChain;
+        this.updateBlockChain();
     }
 
     getUserInfo() {
+        this.getLatestBlockChain();
         const balance = this.blockChain.getBalanceOfAddress(
             Key.getPublic('hex')
         );
@@ -63,12 +67,14 @@ export default class App {
     }
 
     logBlockChain() {
+        this.getLatestBlockChain();
         console.log(
             `${colorIt(JSON.stringify(this.blockChain, null, 4)).blue()}`
         );
     }
 
     isBlockChainValid() {
+        this.getLatestBlockChain();
         if (this.blockChain.checkIfValid()) {
             console.log(
                 `${emojic.whiteCheckMark}  ${colorIt(
@@ -80,5 +86,20 @@ export default class App {
                 `${emojic.noEntry}  ${colorIt("Block chain isn't valid.").red}`
             );
         }
+    }
+
+    listPeers() {
+        for (const id in this.p2p.getAllPeers()) {
+            console.log(`${emojic.key}  PUBLIC KEY: ${colorIt(id).emerland()}`);
+        }
+    }
+
+    updateBlockChain() {
+        kfs.blockChain = this.blockChain;
+        this.p2p.broadcast(JSON.stringify(this.blockChain));
+    }
+
+    getLatestBlockChain() {
+        this.blockChain = new BlockChain(kfs.blockChain);
     }
 }
