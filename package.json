@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --experimental-modules script.mjs"
+    "start": "node --experimental-modules --experimental-worker --no-warnings script.mjs"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +18,10 @@
     "inquirer": "^6.2.2",
     "key-file-storage": "^2.1.5",
     "node-emoji": "^1.10.0",
-    "portfinder": "^1.0.20"
+    "portfinder": "^1.0.20",
+    "bluebird": "^3.5.3",
+    "cli-spinner": "^0.2.10",
+    "emojic": "^1.1.15"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",

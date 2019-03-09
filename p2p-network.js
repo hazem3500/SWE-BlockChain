@@ -1,15 +1,10 @@
-import {
-  get
-} from 'http';
-
 const crypto = require('crypto');
 const Swarm = require('discovery-swarm');
 const defaults = require('dat-swarm-defaults');
 const getPort = require('get-port');
 
-const peers = {};
 
-let connSeq = 0;
+
 
 export default class P2pNetwork {
   constructor({
@@ -22,6 +17,9 @@ export default class P2pNetwork {
       id: myId
     });
     this.sw = Swarm(config);
+    this.peers = {};
+    this.connSeq = 0;
+    init();
   }
 
   async init() {
@@ -31,20 +29,19 @@ export default class P2pNetwork {
     sw.join(channel);
     sw.on('connection', function (conn, info) {
       const seq = connSeq;
-  
-      log(`Connected #${seq} to peer: ${peerId}`);
-     
+      const peerId = info.id.toString('hex');
+      console.log("connected!");
 
       if (info.initiator) {
         try {
-          conn.setKeepAlive(true, 600)
+          conn.setKeepAlive(true, 600);
         } catch (exception) {
-          log('exception', exception)
+          console.log('exception', exception);
         }
       }
 
       conn.on('data', data => {
-        console.log('Received new Block '+ data.toString());
+        console.log('Received new Block ' + data.toString());
       });
 
       conn.on('close', () => {
@@ -62,12 +59,12 @@ export default class P2pNetwork {
 
     });
   }
-  
-    broadcast(message) {
-      for (let id in peers){
-        peers[id].conn.write(message);
-      }
+
+  broadcast(message) {
+    for (let id in peers) {
+      peers[id].conn.write(message);
     }
-  
-  
   }
+
+
+}
