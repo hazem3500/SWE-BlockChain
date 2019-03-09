@@ -19,6 +19,31 @@ export default class App {
         } else {
             this.blockChain = new BlockChain(kfs.blockChain);
         }
+
+        // GIVE NEW USER 100 PC
+        const userMadeTransaction = this.blockChain.chain.some(
+            (block) =>
+                block.fromAddress === Key.getPublic('hex') &&
+                block.toAddress === Key.getPublic('hex')
+        );
+        const userHasPendingTransactions = this.blockChain.pendingTransactions.some(
+            (transaction) => transaction.toAddress === Key.getPublic('hex')
+        );
+        const userBalance = this.blockChain.getBalanceOfAddress(
+            Key.getPublic('hex')
+        );
+        if (
+            userBalance === 0 &&
+            !userMadeTransaction &&
+            !userHasPendingTransactions
+        ) {
+            const transaction = new Transaction({
+                fromAddress: null,
+                toAddress: Key.getPublic('hex'),
+                amount: 100
+            });
+            this.blockChain.pendingTransactions.push(transaction);
+        }
     }
 
     async addTransaction() {
