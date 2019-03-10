@@ -1,21 +1,30 @@
 {
-    "name": "blockchain",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "start": "node --experimental-modules --experimental-worker --no-warnings script.mjs"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "bluebird": "^3.5.3",
-        "cli-spinner": "^0.2.10",
-        "color-it": "^1.2.11",
-        "crypto-js": "^3.1.9-1",
-        "elliptic": "^6.4.1",
-        "emojic": "^1.1.15",
-        "inquirer": "^6.2.2",
-        "key-file-storage": "^2.1.5"
-    }
+  "name": "blockchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --experimental-modules --experimental-worker --no-warnings script.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "color-it": "^1.2.11",
+    "crypto-js": "^3.1.9-1",
+    "dat-swarm-defaults": "^1.0.2",
+    "discovery-swarm": "^5.1.4",
+    "elliptic": "^6.4.1",
+    "get-port": "^4.2.0",
+    "inquirer": "^6.2.2",
+    "key-file-storage": "^2.1.5",
+    "node-emoji": "^1.10.0",
+    "portfinder": "^1.0.20",
+    "bluebird": "^3.5.3",
+    "cli-spinner": "^0.2.10",
+    "emojic": "^1.1.15"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  }
 }
