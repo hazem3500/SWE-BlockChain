@@ -22,13 +22,15 @@ const options = [
             { name: 'Log block chain', value: 'log' },
             { name: 'Validate block chain', value: 'validate' },
             { name: 'List all peers', value: 'listPeers' },
+            { name: 'get Copy of blockchain', value: 'getBlock'},
+            { name: 'get longest blockchain', value: 'lngBlockChain'},
             { name: 'Exit', value: 'exit' }
         ]
     }
 ];
 
 async function run() {
-    await p2p.init();
+    await p2p.init(app);
     console.log(
         `${colorIt(
             `WELCOME TO THE POTATO ${emojic.potato}  BLOCK CHAIN!`
@@ -39,7 +41,7 @@ async function run() {
         () => !exitApplication,
         () =>
             inquirer.prompt(options).then(async (answers) => {
-                // kfs.blockChain = await p2p.getLongestBlockChain(); TODO: UNCOMMENT AFTER IMPLEMENTATION
+                // kfs.blockChain = await p2p.getLongestBlockChain(); //TODO: UNCOMMENT AFTER IMPLEMENTATION
                 console.log(
                     '\n',
                     `${emojic.smallOrangeDiamond} `.repeat(55),
@@ -50,7 +52,8 @@ async function run() {
                     await app.addTransaction();
                     break;
                 case 'mine':
-                    await app.mine();
+                    p2p.sendJsonMessage('all','request');
+                    // await app.mine();
                     break;
                 case 'info':
                     app.getUserInfo();
@@ -62,7 +65,13 @@ async function run() {
                     app.isBlockChainValid();
                     break;
                 case 'listPeers':
-                    app.listPeers();
+                    p2p.listPeers();
+                    break;
+                case 'getBlock':
+                    await app.getBlockByPublicKey();
+                    break;
+                case 'lngBlockChain':
+                    await p2p.getLongestBlockChain();
                     break;
                 case 'exit':
                     exitApplication = true;

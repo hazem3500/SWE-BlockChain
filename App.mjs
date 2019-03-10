@@ -68,6 +68,16 @@ export default class App {
         this.updateBlockChain();
     }
 
+    async getBlockByPublicKey() {
+        const answers = await inquirer.prompt([
+            {
+                name: 'publicKey',
+                message: "Enter receiver's key: "
+            }
+        ]);
+        this.p2p.requestFromPeer(answers.publicKey);
+    }
+
     async mine() {
         this.getLatestBlockChain();
         await this.blockChain.minePendingTransactions(Key.getPublic('hex'));
@@ -113,11 +123,7 @@ export default class App {
         }
     }
 
-    listPeers() {
-        for (const id in this.p2p.getAllPeers()) {
-            console.log(`${emojic.key}  PUBLIC KEY: ${colorIt(id).emerland()}`);
-        }
-    }
+    
 
     updateBlockChain() {
         kfs.blockChain = this.blockChain;
@@ -126,5 +132,6 @@ export default class App {
 
     getLatestBlockChain() {
         this.blockChain = new BlockChain(kfs.blockChain);
+        return this.blockChain;
     }
 }
